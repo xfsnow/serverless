@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  MyEnvironment:
+    Type: String
+    Default: testing
+    AllowedValues:
+      - testing
+      - staging
+      - prod
+    Description: Environment of this stack of resources
+Resources:
+  ApiHelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref MyEnvironment
+      # 在 Events 节点下增加 Api 类型的资源，可以方便地创建出一个 API Gateway 的 API
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get

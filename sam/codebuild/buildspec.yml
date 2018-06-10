@@ -1,0 +1,14 @@
+version: 0.1
+
+phases:
+  install:
+    commands:
+      - npm install time
+  build:
+    commands:
+      - aws cloudformation package --template-file codebuild.yaml --s3-bucket <bucket-name> --output-template-file output_codebuild.yaml
+
+artifacts:
+  type: zip
+  files:
+    - output_codebuild.yaml

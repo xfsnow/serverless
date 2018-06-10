@@ -1,0 +1,22 @@
+{%include file="inc.begin.html" %}
+	<h1 style="text-align:center">{%$title%}</h1>
+	<form method="post" id="form_login" action="/face/add">
+		<p  style="text-align:center">欢迎使用，请登录！</p>
+		<table class="table_login">
+			<tr>
+				<td>用户：</td>
+				<td>
+				<input name="username" type="text" size="16" maxlength="24" tabindex="1" /></td>
+			</tr>
+			<tr>
+				<td>密码：</td>
+				<td><input name="password" type="password" size="16" maxlength="64" tabindex="2" /></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+				<input type="submit" value="登录" />
+					<input type="reset" value="重置" /></td>
+			</tr>
+		</table>
+	</form>
+{%include file="inc.end.html" %}	

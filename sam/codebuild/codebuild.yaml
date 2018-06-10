@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ApiHelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      # 注意这里 Lmabda 函数的运行时要选用 Node.js 4.3 ，因为稍后我们用 CodeBuild 构建时要安装依赖库也是 4.3 版本。
+      Runtime: nodejs4.3
+      Environment:
+        Variables:
+          S3_BUCKET: bucket
+      # 在 Events 节点下增加 Api 类型的资源，可以方便地创建出一个 API Gateway 的 API
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get

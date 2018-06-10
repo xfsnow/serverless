@@ -1,0 +1,25 @@
+{%include file="inc.begin.html" %}
+	<h1>{%$title%}</h1>
+<table>
+<tr>
+<th>FunctionName</th>
+<th>Runtime</th>
+<th>Timeout</th>
+<th>MemorySize</th>  
+<th>LastModified</th>
+<th>CodeSize</th>
+<th>Description</th>
+</tr>
+{%foreach from=$functions key=k item=v %}
+<tr>  
+<td>{%$v.FunctionName%}</td>
+<td>{%$v.Runtime%}</td>
+<td>{%$v.Timeout%}</td>
+<td>{%$v.MemorySize%}</td>  
+<td>{%$v.LastModified%}</td>
+<td>{%$v.CodeSize%}</td>
+<td>{%$v.Description%}</td>
+{%/foreach%}
+<tr>   
+</table>
+{%include file="inc.end.html" %}

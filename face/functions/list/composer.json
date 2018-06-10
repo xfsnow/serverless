@@ -1,0 +1,21 @@
+{
+    "require": {
+        "smarty/smarty": "^3.1",
+        "aws/aws-sdk-php": "^3.29"
+    },
+    "autoload": {
+        "psr-4": {
+            "Library\\": "lib",
+            "Config\\": "config"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

@@ -1,0 +1,221 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A demo to show Serverless App coded with Lambda nodejs spawn to PHP executable. All API Gateway environment parameters have been transformed to PHP environment variables. PHP libraries required to use AWS SDK are built into lambda package.
+Parameters:
+  AWSKEY:
+    Type: String
+    Description: AWS access key 
+  AWSSECRET:
+    Type: String
+    Description: AWS secret key
+
+Resources:
+  faceSAM:
+    Type: AWS::Serverless::Api
+    Properties:
+        StageName: prod
+        DefinitionBody:
+            swagger: 2.0
+            info:
+              title:
+                Ref: AWS::StackName
+            paths:
+              /:
+                get:
+                  consumes:
+                  - "application/json"
+                  produces:
+                  - "application/json"
+                  - "text/html"
+                  responses:
+                    "200":
+                      description: "200 response"
+                      schema:
+                        $ref: "#/definitions/Empty"
+                      headers:
+                        Content-Type:
+                          type: "string"
+                  x-amazon-apigateway-integration:
+                    responses:
+                      default:
+                        statusCode: "200"
+                        responseParameters:
+                          method.response.header.Content-Type: "'text/html'"
+                        responseTemplates:
+                          text/html: "$input.path('$')"
+                    uri:
+                      Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${face.Arn}/invocations
+                    passthroughBehavior: "when_no_templates"
+                    httpMethod: "POST"
+                    requestTemplates:
+                      application/json: "##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n\
+                        ##  This template will pass through all parameters including path, querystring,\
+                        \ header, stage variables, and context through to the integration endpoint\
+                        \ via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\"\
+                        \ : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n\
+                        \    #set($params = $allParams.get($type))\n\"$type\" : {\n    #foreach($paramName\
+                        \ in $params.keySet())\n    \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\
+                        \n        #if($foreach.hasNext),#end\n    #end\n}\n    #if($foreach.hasNext),#end\n\
+                        #end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\
+                        \"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n   \
+                        \ #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n    \"account-id\"\
+                        \ : \"$context.identity.accountId\",\n    \"api-id\" : \"$context.apiId\"\
+                        ,\n    \"api-key\" : \"$context.identity.apiKey\",\n    \"authorizer-principal-id\"\
+                        \ : \"$context.authorizer.principalId\",\n    \"caller\" : \"$context.identity.caller\"\
+                        ,\n    \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\"\
+                        ,\n    \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\"\
+                        ,\n    \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\"\
+                        ,\n    \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\"\
+                        ,\n    \"http-method\" : \"$context.httpMethod\",\n    \"stage\" : \"\
+                        $context.stage\",\n    \"source-ip\" : \"$context.identity.sourceIp\"\
+                        ,\n    \"user\" : \"$context.identity.user\",\n    \"user-agent\" : \"\
+                        $context.identity.userAgent\",\n    \"user-arn\" : \"$context.identity.userArn\"\
+                        ,\n    \"request-id\" : \"$context.requestId\",\n    \"resource-id\" :\
+                        \ \"$context.resourceId\",\n    \"resource-path\" : \"$context.resourcePath\"\
+                        \n    }\n}\n"
+                    contentHandling: "CONVERT_TO_TEXT"
+                    type: "aws"
+              /env/lambda:
+                get:
+                  consumes:
+                  - "application/json"
+                  produces:
+                  - "application/json"
+                  - "text/html"
+                  responses:
+                    "200":
+                      description: "200 response"
+                      schema:
+                        $ref: "#/definitions/Empty"
+                      headers:
+                        Content-Type:
+                          type: "string"
+                  x-amazon-apigateway-integration:
+                    responses:
+                      default:
+                        statusCode: "200"
+                        responseParameters:
+                          method.response.header.Content-Type: "'text/html'"
+                        responseTemplates:
+                          text/html: "$input.path('$')"
+                    uri:
+                      Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${face.Arn}/invocations
+                    passthroughBehavior: "when_no_templates"
+                    httpMethod: "POST"
+                    requestTemplates:
+                      application/json: "##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n\
+                        ##  This template will pass through all parameters including path, querystring,\
+                        \ header, stage variables, and context through to the integration endpoint\
+                        \ via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\"\
+                        \ : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n\
+                        \    #set($params = $allParams.get($type))\n\"$type\" : {\n    #foreach($paramName\
+                        \ in $params.keySet())\n    \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\
+                        \n        #if($foreach.hasNext),#end\n    #end\n}\n    #if($foreach.hasNext),#end\n\
+                        #end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\
+                        \"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n   \
+                        \ #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n    \"account-id\"\
+                        \ : \"$context.identity.accountId\",\n    \"api-id\" : \"$context.apiId\"\
+                        ,\n    \"api-key\" : \"$context.identity.apiKey\",\n    \"authorizer-principal-id\"\
+                        \ : \"$context.authorizer.principalId\",\n    \"caller\" : \"$context.identity.caller\"\
+                        ,\n    \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\"\
+                        ,\n    \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\"\
+                        ,\n    \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\"\
+                        ,\n    \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\"\
+                        ,\n    \"http-method\" : \"$context.httpMethod\",\n    \"stage\" : \"\
+                        $context.stage\",\n    \"source-ip\" : \"$context.identity.sourceIp\"\
+                        ,\n    \"user\" : \"$context.identity.user\",\n    \"user-agent\" : \"\
+                        $context.identity.userAgent\",\n    \"user-arn\" : \"$context.identity.userArn\"\
+                        ,\n    \"request-id\" : \"$context.requestId\",\n    \"resource-id\" :\
+                        \ \"$context.resourceId\",\n    \"resource-path\" : \"$context.resourcePath\"\
+                        \n    }\n}\n"
+                    contentHandling: "CONVERT_TO_TEXT"
+                    type: "aws"
+              /env/php:
+                get:
+                  consumes:
+                  - "application/json"
+                  produces:
+                  - "application/json"
+                  - "text/html"
+                  responses:
+                    "200":
+                      description: "200 response"
+                      schema:
+                        $ref: "#/definitions/Empty"
+                      headers:
+                        Content-Type:
+                          type: "string"
+                  x-amazon-apigateway-integration:
+                    responses:
+                      default:
+                        statusCode: "200"
+                        responseParameters:
+                          method.response.header.Content-Type: "'text/html'"
+                        responseTemplates:
+                          text/html: "$input.path('$')"
+                    uri:
+                      Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${face.Arn}/invocations
+                    passthroughBehavior: "when_no_templates"
+                    httpMethod: "POST"
+                    requestTemplates:
+                      application/json: "##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n\
+                        ##  This template will pass through all parameters including path, querystring,\
+                        \ header, stage variables, and context through to the integration endpoint\
+                        \ via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\"\
+                        \ : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n\
+                        \    #set($params = $allParams.get($type))\n\"$type\" : {\n    #foreach($paramName\
+                        \ in $params.keySet())\n    \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\
+                        \n        #if($foreach.hasNext),#end\n    #end\n}\n    #if($foreach.hasNext),#end\n\
+                        #end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\
+                        \"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n   \
+                        \ #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n    \"account-id\"\
+                        \ : \"$context.identity.accountId\",\n    \"api-id\" : \"$context.apiId\"\
+                        ,\n    \"api-key\" : \"$context.identity.apiKey\",\n    \"authorizer-principal-id\"\
+                        \ : \"$context.authorizer.principalId\",\n    \"caller\" : \"$context.identity.caller\"\
+                        ,\n    \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\"\
+                        ,\n    \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\"\
+                        ,\n    \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\"\
+                        ,\n    \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\"\
+                        ,\n    \"http-method\" : \"$context.httpMethod\",\n    \"stage\" : \"\
+                        $context.stage\",\n    \"source-ip\" : \"$context.identity.sourceIp\"\
+                        ,\n    \"user\" : \"$context.identity.user\",\n    \"user-agent\" : \"\
+                        $context.identity.userAgent\",\n    \"user-arn\" : \"$context.identity.userArn\"\
+                        ,\n    \"request-id\" : \"$context.requestId\",\n    \"resource-id\" :\
+                        \ \"$context.resourceId\",\n    \"resource-path\" : \"$context.resourcePath\"\
+                        \n    }\n}\n"
+                    contentHandling: "CONVERT_TO_TEXT"
+                    type: "aws"
+
+
+
+  face:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: ./functions/list
+      Environment:
+        Variables:
+          AWSKEY: !Ref AWSKEY
+          AWSSECRET: !Ref AWSSECRET
+      
+      Events:
+      # 1. Resource with id [faceenv_lambda] is invalid. Logical ids must be alphanumeric.
+        indexIndex:
+          Type: Api
+          Properties:
+            RestApiId: !Ref faceSAM
+            Path: /
+            Method: GET
+        envLambda:
+          Type: Api
+          Properties:
+            RestApiId: !Ref faceSAM
+            Path: /env/lambda
+            Method: GET
+        envPhp:
+          Type: Api
+          Properties:
+            RestApiId: !Ref faceSAM
+            Path: /env/php
+            Method: GET

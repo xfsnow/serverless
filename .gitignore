@@ -1,0 +1,14 @@
+*.buildpath
+*.project
+
+*/.settings
+/face/functions/list/templates_c
+/face/project.json
+/face/functions/list/*.sublime-workspace
+/face/functions/list/*.sublime-project
+/face/face-test-swagger-apigateway.yaml
+/AuthenticateUser/.gitignore
+/AuthenticateUser/.project
+/AuthenticateUser/.settings
+/AuthenticateUser/.classpath
+/cognitowx/*.classpath
