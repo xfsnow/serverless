@@ -1,10 +1,17 @@
 package cn.amazonaws.lambda.cognitowechat;
 
 public class CognitoWechatResponse {
-	protected Integer userId = null;
-    protected String openIdToken = null;
-    protected String status = "false";
-		
+	private String identityId;
+	private Integer userId = null;
+	private String openIdToken = null;
+	private String status = "false";
+    
+	public String getIdentityId() {
+		return identityId;
+	}
+	public void setIdentityId(String identityId) {
+		this.identityId = identityId;
+	}		
     public Integer getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
 

@@ -37,6 +37,7 @@ public class CognitoWechat implements RequestHandler<Object, Object> {
 //        cwResponse.setOpenIdToken(code);
         CognitoUser user = authenticateUser(code);
         if(user!=null){
+        	cwResponse.setIdentityId(user.getIdentityId());
             cwResponse.setUserId(user.getUserId());
             cwResponse.setOpenIdToken(user.getOpenIdToken());
             cwResponse.setStatus("true");
