@@ -1,0 +1,10 @@
+version: 0.1
+phases:
+  install:
+    commands:
+      - npm install time
+      - aws cloudformation package --template-file codepipeline.yaml --s3-bucket email-receive-2017 --output-template-file output-codepipeline.yaml
+artifacts:
+  type: zip
+  files:
+    - output-codepipeline.yaml
